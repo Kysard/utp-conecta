@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Blog | UTP Conecta +</title>
+    {% include 'head.html' %}
+</head>
+
+<body>
+
+    <div class="main-wrapper">
+
+        {% include 'encabezado.html' %}
+        {% include 'barraLateral.html' %}
+
+        <div class="page-wrapper">
+            <div class="content container-fluid">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <h5 class="text-uppercase mb-0 mt-0 page-title">Editar blog</h5>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <ul class="breadcrumb float-right p-0 mb-0">
+                                <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i>Inicio</a>
+                                </li>
+                                <li class="breadcrumb-item"><a href="#">Blog</a></li>
+                                <li class="breadcrumb-item"><span> Editar blog</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form>
+                                    <div class="form-group">
+                                        <label>Nombre del blog</label>
+                                        <input type="text" class="form-control" value="Se busca programador junior">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Imágenes del blog</label>
+                                        <input type="file" name="pic" accept="image/*" class="form-control">
+                                        <small class="form-text text-muted">Tamaño máximo de archivo: 50 MB. Imágenes
+                                            permitidas: jpg, gif, png. Máximo de 10 imágenes.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                                <div class="product-thumbnail">
+                                                    <img src="../static/img/blog/blog-thumb-01.jpg"
+                                                        class="img-thumbnail img-fluid" alt="">
+                                                    <span class="product-remove" title="remove"><i
+                                                            class="fas fa-times"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                                <div class="product-thumbnail">
+                                                    <img src="../static/img/placeholder-thumb.jpg"
+                                                        class="img-thumbnail img-fluid" alt="">
+                                                    <span class="product-remove" title="remove"><i
+                                                            class="fas fa-times"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                                <div class="product-thumbnail">
+                                                    <img src="../static/img/placeholder-thumb.jpg"
+                                                        class="img-thumbnail img-fluid" alt="">
+                                                    <span class="product-remove" title="remove"><i
+                                                            class="fas fa-times"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                                <div class="product-thumbnail">
+                                                    <img src="../static/img/placeholder-thumb.jpg"
+                                                        class="img-thumbnail img-fluid" alt="">
+                                                    <span class="product-remove" title="remove"><i
+                                                            class="fas fa-times"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                                <div class="product-thumbnail">
+                                                    <img src="../static/img/placeholder-thumb.jpg"
+                                                        class="img-thumbnail img-fluid" alt="">
+                                                    <span class="product-remove" title="remove"><i
+                                                            class="fas fa-times"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
+                                                <div class="product-thumbnail">
+                                                    <img src="../static/img/placeholder-thumb.jpg"
+                                                        class="img-thumbnail img-fluid" alt="">
+                                                    <span class="product-remove" title="remove"><i
+                                                            class="fas fa-times"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Categoría de blog</label>
+                                                <select class="form-control select">
+                                                    <option>Empleo</option>
+                                                    <option>Biblioteca</option>
+                                                    <option>Gestión</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Subcategoría de blog</label>
+                                                <select class="form-control select">
+                                                    <option>Practicas</option>
+                                                    <option>Ciencia</option>
+                                                    <option>Social Science</option>
+                                                    <option>Inglés</option>
+                                                    <option>Codificador</option>
+                                                    <option>Tamil</option>
+                                                    <option>H.O.D</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Descripción del blog</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Etiquetas <small>(Separado con una coma)</small></label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <h4>Estado del blog</h4>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="radio1">
+                                                    <input type="radio" class="form-check-input" id="radio1"
+                                                        name="optradio" value="option1" checked="">Activo
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="radio2">
+                                                    <input type="radio" class="form-check-input" id="radio2"
+                                                        name="optradio" value="option2">Inactivo
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-t-20 text-center">
+                                        <button class="btn btn-primary btn-lg mb-3">Guardar cambios</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <script src="../static/js/jquery-3.6.0.min.js"></script>
+
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../static/js/jquery.slimscroll.js"></script>
+    <script src="../static/js/select2.min.js"></script>
+    <script src="../static/js/tagsinput.js"></script>
+
+    <script src="../static/js/app.js"></script>
+
+
+</body>
+
+</html>

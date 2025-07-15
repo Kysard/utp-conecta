@@ -1,0 +1,122 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #eee;
+    padding: 10px 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 60px;
+}
+
+.logo img {
+    height: 50px;
+    width: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.logo .utp {
+    background-color: black;
+    color: white;
+    padding: 5px;
+}
+
+.logo .plus {
+    color: red;
+    font-size: 20px;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.top-bar input[type="text"] {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.icons span {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    height: calc(100vh - 60px);
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    margin: 15px 0;
+    cursor: pointer;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: black;
+    display: block;
+    padding: 5px 0;
+    transition: background-color 0.2s;
+}
+
+.sidebar a:hover {
+    background-color: #ddd;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.search-box input[type="text"] {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.search-box button {
+    padding: 6px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-box button:hover {
+    background-color: #0056b3;
+}

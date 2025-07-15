@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse | UTP Conecta +</title>
+    <link rel="stylesheet" href="../static/css/styles.css" />
+</head>
+
+<body>
+   <div class="container">
+        <div class="left">
+            <h1>¡Regístrate!</h1>
+            <p>Completa tus datos y únete a la comunidad UTP.</p>
+            <img src="{{ url_for('static', filename='img/Comunidad.png') }}" alt="Ilustración de registro" />
+        </div>
+        <div class="right">
+            <h2>Registro</h2>
+
+            {% if mensaje %}
+                <p style="color: green;">{{ mensaje }}</p>
+            {% endif %}
+            {% if error %}
+                <p style="color: red;">{{ error }}</p>
+            {% endif %}
+
+            <p id="error-message" style="color: red;"></p>
+
+            <!-- Consulta por DNI -->
+            <form id="form-dni">
+                <label for="dni">Número de DNI</label><br>
+                <input type="text" id="dni" name="dni" maxlength="8" required />
+                <button type="button" onclick="consultarDNI(event)">Consultar</button>
+            </form>
+
+            <!-- Registro final -->
+            <form action="/registro" method="post">
+                <input type="hidden" name="dni" id="dni-hidden" />
+
+                <label for="nombres">Nombres</label>
+                <input type="text" id="nombres" name="nombres" readonly />
+
+                <label for="apellido_paterno">Apellido Paterno</label>
+                <input type="text" id="apellido_paterno" name="apellido_paterno" readonly />
+
+                <label for="apellido_materno">Apellido Materno</label>
+                <input type="text" id="apellido_materno" name="apellido_materno" readonly />
+
+                <label for="sexo">Género</label>
+                <input type="text" id="sexo" name="sexo" readonly />
+
+                <label for="usuario">Usuario</label>
+                <input type="text" id="usuario" name="usuario" required />
+
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" name="contrasena" required />
+
+                <button type="submit">Registrar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function consultarDNI(event) {
+            event.preventDefault();
+            const dni = document.getElementById('dni').value;
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = '';
+
+            // Validación básica del DNI
+            if (!dni || dni.length !== 8 || !/^\d+$/.test(dni)) {
+                errorMessage.textContent = 'El DNI debe tener 8 dígitos numéricos';
+                return;
+            }
+
+            try {
+                const response = await fetch('/consultar_dni', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ dni })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const data = result.data;
+                    document.getElementById('nombres').value = data.nombres || '';
+                    document.getElementById('apellido_paterno').value = data.apellido_paterno || '';
+                    document.getElementById('apellido_materno').value = data.apellido_materno || '';
+                    document.getElementById('sexo').value = data.sexo || '';
+                    // Asignar el DNI al campo oculto
+                    document.getElementById('dni-hidden').value = dni;
+                } else {
+                    errorMessage.textContent = 'Error: ' + result.error;
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Error en la conexión: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

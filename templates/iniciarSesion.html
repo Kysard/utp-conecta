@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | UTP Conecta +</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .btn-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #6a35ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-link:hover {
+            background-color: #5a2de0;
+        }
+        .alert {
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .restablecer {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .restablecer a {
+            color: #6a35ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .restablecer a:hover {
+            text-decoration: underline;
+        }
+        .logo-img {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h1>¡Te damos la bienvenida!</h1>
+            <p>La comunidad UTP te espera: estudia, colabora y crece junto a otros estudiantes.</p>
+            <img src="{{ url_for('static', filename='img/Comunidad.png') }}" alt="Ilustración de bienvenida">
+        </div>
+
+        <div class="right">
+            <img src="{{ url_for('static', filename='img/U.jpg') }}" alt="Logo UTP Comunidad" class="logo-img">
+            <h2>¡Hola!</h2>
+            <p>Ingresa tus datos para <strong>iniciar sesión</strong>.</p>
+            
+            <!-- Mensajes Flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST" action="{{ url_for('iniciarSesion_P.vista_iniciarSesion') }}">
+                <label for="usuario">Usuario:</label>
+                <input type="text" id="usuario" name="usuario" placeholder="Ejemplo: U15219868" required>
+                
+                <label for="contraseña">Contraseña:</label>
+                <input type="password" id="contraseña" name="contraseña" required>
+
+                <div class="restablecer">
+                    <a href="#">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <div class="restablecer">
+                    <a href="{{ url_for('registro_P.vista_registro') }}">¿No tienes cuenta? ¡Regístrate!</a>
+                </div>
+
+                <button type="submit" class="btn-link">Iniciar sesión</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

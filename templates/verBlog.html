@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Blog | UTP Conecta +</title>
+    {% include 'head.html' %}
+</head>
+
+<body>
+
+    <div class="main-wrapper">
+
+        {% include 'encabezado.html' %}
+        {% include 'barraLateral.html' %}
+
+        <div class="page-wrapper">
+
+            <div class="content container-fluid">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <h5 class="text-uppercase mb-0 mt-0 page-title">Vista del Blog</h5>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <ul class="breadcrumb float-right p-0 mb-0">
+                                <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i> Inicio</a></li>
+                                <li class="breadcrumb-item"><a href="#">Blog</a></li>
+                                <li class="breadcrumb-item"><span> Vista del Blog</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="blog-view">
+                            <article class="blog blog-single-post">
+                                <h3 class="blog-title">UTP CONECTA +: La Nueva Plataforma de Colaboración entre
+                                    Estudiantes
+                                    de
+                                    la UTP</h3>
+                                <div class="blog-info clearfix">
+                                    <div class="post-left">
+                                        <ul>
+                                            <li><a href="#"><i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                                    <span>30
+                                                        de
+                                                        mayo, 2025</span></a></li>
+                                            <li><a href="#"><i class="fas fa-user-o" aria-hidden="true"></i> <span>Por
+                                                        Rodrigo
+                                                        Quispe</span></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="post-right"><a href="#"><i class="fas fa-comment-o"
+                                                aria-hidden="true"></i>3
+                                            Comentarios</a></div>
+                                </div>
+                                <div class="blog-image">
+                                    <a href="#"><img alt="" src="../static/img/blog/blog-01.jpg" class="img-fluid"></a>
+                                </div>
+                                <div class="blog-content">
+                                    <p>UTP CONECTA +: Una plataforma para potenciar la colaboración entre estudiantes
+                                    </p>
+                                    <p>En la UTP sabemos que nuestros estudiantes tienen mucho talento y conocimientos
+                                        valiosos,
+                                        pero a veces no encuentran un espacio organizado para compartirlos o pedir
+                                        apoyo.
+                                        Por
+                                        eso creamos UTP CONECTA +, una plataforma virtual que permite a los estudiantes
+                                        ofrecer
+                                        y buscar servicios académicos y técnicos según su carrera y sede. Esta
+                                        herramienta
+                                        fomenta el trabajo colaborativo, mejora el aprendizaje práctico y fortalece
+                                        nuestra
+                                        comunidad universitaria. ¡Un nuevo espacio para aprender y crecer juntos!</p>
+                                    <blockquote>
+                                        <p>¿Quieres aprovechar mejor tus habilidades? Conoce UTP CONECTA +</p>
+                                        <p>UTP CONECTA + te permite publicar y solicitar servicios dentro de la
+                                            comunidad
+                                            estudiantil, desde diseño gráfico hasta asesorías técnicas. Ahorra tiempo,
+                                            conecta
+                                            con compañeros de tu carrera y potencia tu desarrollo profesional. Solo
+                                            necesitas tu
+                                            cuenta institucional para ingresar. ¡Saca el máximo provecho a lo que sabes
+                                            y
+                                            comparte con otros!</p>
+                                    </blockquote>
+                                    <p>En UTP CONECTA + cuidamos que la colaboración sea segura y exclusiva para
+                                        estudiantes
+                                        activos. No permitimos contenido inapropiado ni intermediarios externos. Nuestro
+                                        objetivo es crear un espacio confiable para que puedas compartir y solicitar
+                                        servicios
+                                        académicos sin preocupaciones. ¡Construyamos juntos una comunidad unida y
+                                        profesional!
+                                    </p>
+                                </div>
+                            </article>
+                            <div class="widget blog-share clearfix">
+                                <h3>Comparte la publicación</h3>
+                                <ul class="social-share">
+                                    <li><a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#" title="Twitter"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#" title="Linkedin"><i class="fab fa-linkedin-in"></i></a></li>
+                                    <li><a href="#" title="Google Plus"><i class="fab fa-google-plus-g"></i></a></li>
+                                    <li><a href="#" title="Youtube"><i class="fab fa-youtube"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="widget author-widget clearfix">
+                                <h3>Acerca del autor</h3>
+                                <div class="about-author">
+                                    <div class="about-author-img">
+                                        <div class="author-img-wrap">
+                                            <img class="img-fluid rounded-circle" alt="" src="../static/img/user.jpg">
+                                        </div>
+                                    </div>
+                                    <div class="author-details">
+                                        <span class="blog-author-name">Lucía Mendoza</span>
+                                        <p>23 años</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget blog-comments clearfix">
+                                <h3>Comentarios (3)</h3>
+                                <ul class="comments-list">
+                                    <li>
+                                        <div class="comment">
+                                            <div class="comment-author">
+                                                <img class="avatar" alt="" src="../static/img/user.jpg">
+                                            </div>
+                                            <div class="comment-block">
+                                                <span class="comment-by">
+                                                    <span class="blog-author-name">Daniela Huamán</span>
+                                                    <span class="float-right">
+                                                        <span class="blog-reply"><a href="#"><i
+                                                                    class="fas fa-reply"></i>
+                                                                Responder</a></span>
+                                                    </span>
+                                                </span>
+                                                <p>¡Esta plataforma es exactamente lo que necesitábamos! Como estudiante
+                                                    de
+                                                    Ingeniería de Sistemas, ya he podido encontrar compañeros que
+                                                    necesitan
+                                                    ayuda con programación y a cambio me han ayudado con mis cursos de
+                                                    matemáticas. ¡100% recomendado!</p>
+                                                <span class="blog-date">30 de mayo, 2025</span>
+                                            </div>
+                                        </div>
+                                        <ul class="comments-list reply">
+                                            <li>
+                                                <div class="comment">
+                                                    <div class="comment-author">
+                                                        <img class="avatar" alt="" src="../static/img/user.jpg">
+                                                    </div>
+                                                    <div class="comment-block">
+                                                        <span class="comment-by">
+                                                            <span class="blog-author-name">Carlos Rojas</span>
+                                                            <span class="float-right">
+                                                                <span class="blog-reply"><a href="#"><i
+                                                                            class="fas fa-reply"></i>
+                                                                        Responder</a></span>
+                                                            </span>
+                                                        </span>
+                                                        <p>Totalmente de acuerdo Daniela. Yo estudio Arquitectura y
+                                                            encontré
+                                                            a
+                                                            un compañero que me está ayudando con modelado 3D, mientras
+                                                            yo
+                                                            le
+                                                            doy tips para sus presentaciones. La comunidad UTP tiene
+                                                            mucho
+                                                            talento que ahora podemos compartir formalmente.</p>
+                                                        <span class="blog-date">30 de mayo, 2025</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="comment">
+                                                    <div class="comment-author">
+                                                        <img class="avatar" alt="" src="../static/img/user.jpg">
+                                                    </div>
+                                                    <div class="comment-block">
+                                                        <span class="comment-by">
+                                                            <span class="blog-author-name">Daniela Huamán</span>
+                                                            <span class="float-right">
+                                                                <span class="blog-reply"> <a href="#"><i
+                                                                            class="fas fa-reply"></i>
+                                                                        Responder</a></span>
+                                                            </span>
+                                                        </span>
+                                                        <p>¡Exacto Carlos! Lo mejor es que todos somos estudiantes
+                                                            verificados,
+                                                            así que hay más confianza. ¿Alguien más ha probado la
+                                                            sección de
+                                                            proyectos colaborativos? Quiero formar un equipo para el
+                                                            próximo
+                                                            hackathon.</p>
+                                                        <span class="blog-date">30 de mayo, 2025</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <div class="comment">
+                                            <div class="comment-author">
+                                                <img class="avatar" alt="" src="../static/img/user.jpg">
+                                            </div>
+                                            <div class="comment-block">
+                                                <span class="comment-by">
+                                                    <span class="blog-author-name">María Fernanda Torres</span>
+                                                    <span class="float-right">
+                                                        <span class="blog-reply"><a href="#"><i
+                                                                    class="fas fa-reply"></i>
+                                                                Responder</a></span>
+                                                    </span>
+                                                </span>
+                                                <p>Como estudiante de primer ciclo tenía dudas sobre cómo usar la
+                                                    plataforma,
+                                                    pero la interfaz es muy intuitiva. Ya me registré para recibir
+                                                    asesoría
+                                                    en
+                                                    cálculo y ofrezco ayuda con redacción de documentos. ¿Hay algún
+                                                    tutorial
+                                                    para aprovechar al máximo todas las funciones?</p>
+                                                <span class="blog-date">30 de mayo, 2025</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="comment">
+                                            <div class="comment-author">
+                                                <img class="avatar" alt="" src="../static/img/user.jpg">
+                                            </div>
+                                            <div class="comment-block">
+                                                <span class="comment-by">
+                                                    <span class="blog-author-name">Pamela Vargas</span>
+                                                    <span class="float-right">
+                                                        <span class="blog-reply"><a href="#"><i
+                                                                    class="fas fa-reply"></i>
+                                                                Responder</a></span>
+                                                    </span>
+                                                </span>
+                                                <p>¡Felicitaciones por esta iniciativa! Soy estudiante de Administración
+                                                    y
+                                                    ya
+                                                    estoy organizando un grupo de estudio para finanzas a través de la
+                                                    plataforma. Sería genial que agreguen un sistema de calificaciones
+                                                    para
+                                                    los
+                                                    servicios recibidos. ¿Planean expandir las categorías disponibles?
+                                                </p>
+                                                <span class="blog-date">30 de mayo, 2025</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="widget new-comment clearfix">
+                                <h3>Dejar comentario</h3>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="form-group">
+                                                <label>Nombre <span class="text-red">*</span></label>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Tu correo electrónico <span class="text-red">*</span></label>
+                                                <input type="email" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Comentarios</label>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                            <div class="comment-submit">
+                                                <input type="submit" value="Enviar" class="btn">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <aside class="col-md-4">
+                        <div class="widget search-widget">
+                            <h5>Búsqueda de blogs</h5>
+                            <form class="search-form">
+                                <div class="input-group">
+                                    <input type="text" placeholder="Buscar..." class="form-control">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="widget post-widget">
+                            <h5>Últimas publicaciones</h5>
+                            <ul class="laTest-posts">
+                                <li>
+                                    <div class="post-thumb">
+                                        <a href="blog-details.html">
+                                            <img class="img-fluid" src="../static/img/blog/blog-thumb-01.jpg" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="post-info">
+                                        <h4>
+                                            <a href="blog-details.html">Explora ideas que inspiran y transforman</a>
+                                        </h4>
+                                        <p><i aria-hidden="true" class="fas fa-calendar-alt"></i> 6 de Mayo de 2025</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="post-thumb">
+                                        <a href="blog-details.html">
+                                            <img class="img-fluid" src="../static/img/blog/blog-thumb-02.jpg" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="post-info">
+                                        <h4>
+                                            <a href="blog-details.html">Descubre historias que cambian tu visión</a>
+                                        </h4>
+                                        <p><i aria-hidden="true" class="fas fa-calendar-alt"></i> 22 de Abril de 2025
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="post-thumb">
+                                        <a href="blog-details.html">
+                                            <img class="img-fluid" src="../static/img/blog/blog-thumb-03.jpg" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="post-info">
+                                        <h4>
+                                            <a href="blog-details.html">Contenido que informa, inspira y conecta</a>
+                                        </h4>
+                                        <p><i aria-hidden="true" class="fas fa-calendar-alt"></i> 20 de Abril de 2025
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="post-thumb">
+                                        <a href="blog-details.html">
+                                            <img class="img-fluid" src="../static/img/blog/blog-thumb-04.jpg" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="post-info">
+                                        <h4>
+                                            <a href="blog-details.html">Consejos útiles para tu día a día digital</a>
+                                        </h4>
+                                        <p><i aria-hidden="true" class="fas fa-calendar-alt"></i> 6 de Abril de 2025</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="widget category-widget">
+                            <h5>Categorías de blogs</h5>
+                            <ul class="categories">
+                                <li><a href="#"><i class="fas fa-long-arrow-alt-right" aria-hidden="true"></i>
+                                        Tecnología e Innovación</a></li>
+                                <li><a href="#"><i class="fas fa-long-arrow-alt-right" aria-hidden="true"></i> Salud
+                                        Pública y Bienestar Integral</a></li>
+                                <li><a href="#"><i class="fas fa-long-arrow-alt-right" aria-hidden="true"></i> Turismo y
+                                        Desarrollo Sostenible</a></li>
+                                <li><a href="#"><i class="fas fa-long-arrow-alt-right" aria-hidden="true"></i>
+                                        Administración y Emprendimiento</a></li>
+                                <li><a href="#"><i class="fas fa-long-arrow-alt-right" aria-hidden="true"></i>
+                                        Psicología y Desarrollo Personal</a></li>
+                                <li><a href="#"><i class="fas fa-long-arrow-alt-right" aria-hidden="true"></i> Arte,
+                                        Moda y Cultura Contemporánea</a></li>
+                            </ul>
+                        </div>
+                        <div class="widget tags-widget">
+                            <h5>Etiquetas</h5>
+                            <ul class="tags">
+                                <li><a href="#" class="tag">Matemáticas</a></li>
+                                <li><a href="#" class="tag">Ciencia</a></li>
+                                <li><a href="#" class="tag">Biblioteca</a></li>
+                                <li><a href="#" class="tag">Familia</a></li>
+                                <li><a href="#" class="tag">Deportes</a></li>
+                                <li><a href="#" class="tag">Prueba</a></li>
+                                <li><a href="#" class="tag">Alumno</a></li>
+                                <li><a href="#" class="tag">Empleado</a></li>
+                                <li><a href="#" class="tag">Assignment</a></li>
+                                <li><a href="#" class="tag">Examen</a></li>
+                                <li><a href="#" class="tag">Blog</a></li>
+                            </ul>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/jquery-3.6.0.min.js"></script>
+
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../static/js/jquery.slimscroll.js"></script>
+
+    <script src="../static/js/app.js"></script>
+
+</body>
+
+</html>
