@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, jsonify
-from zeep import Client
 import requests
 
 bp = Blueprint('registro_P', __name__, url_prefix='/')
+
+# Configuración de la API
+FASTAPI_URL = "http://localhost:8002/api/registro"  
 
 # Ruta para mostrar el formulario y procesar el registro
 @bp.route('/registro', methods=['GET', 'POST'])
@@ -10,23 +12,30 @@ def vista_registro():
     if request.method == 'POST':
         try:
             # Obtener datos del formulario 
-            dni = request.form['dni']
-            nombres = request.form['nombres']
-            apellido_paterno = request.form['apellido_paterno']
-            apellido_materno = request.form['apellido_materno']
-            sexo = request.form['sexo']
-            usuario = request.form['usuario']
-            contrasena = request.form['contrasena']
+            data = {
+                "DNI": request.form['dni'],
+                "Nombres": request.form['nombres'],
+                "ApellidoPaterno": request.form['apellido_paterno'],
+                "ApellidoMaterno": request.form['apellido_materno'],
+                "Genero": request.form['sexo'],
+                "Usuario": request.form['usuario'],
+                "Contrasena": request.form['contrasena']
+            }
 
-            # Consumir el servicio SOAP 
-            wsdl = 'http://localhost:8000/?wsdl'
-            client = Client(wsdl=wsdl)
-            resultado = client.service.registrar_usuario(
-                dni, nombres, apellido_paterno,
-                apellido_materno, sexo, usuario, contrasena
+            # Consumir la API FastAPI
+            response = requests.post(
+                f"{FASTAPI_URL}/registrar",
+                json=data
             )
 
-            return render_template('iniciarSesion.html', mensaje=resultado)
+            # Verificar si hubo error
+            if response.status_code != 200:
+                error_data = response.json()
+                return render_template('registro.html', error=error_data.get("detail", "Error al registrar usuario"))
+
+            # Si todo fue bien
+            resultado = response.json()
+            return render_template('iniciarSesion.html', mensaje=resultado["message"])
 
         except Exception as e:
             return render_template('registro.html', error=f"Error: {str(e)}")
@@ -34,7 +43,7 @@ def vista_registro():
     return render_template('registro.html')
 
 
-# Ruta para consultar el DNI
+# Ruta para consultar el DNI (combinando tu API y RENIEC)
 @bp.route('/consultar_dni', methods=['POST'])
 def consultar_dni():
     try:
@@ -44,7 +53,18 @@ def consultar_dni():
         if not dni or len(dni) != 8 or not dni.isdigit():
             return jsonify({'success': False, 'error': 'DNI inválido'}), 400
 
-        # Llamada a API externa de DNI
+        # Primero verificar si el DNI ya está registrado en tu sistema
+        try:
+            response = requests.get(f"{FASTAPI_URL}/consultar/{dni}")
+            if response.status_code == 200:
+                return jsonify({
+                    'success': False, 
+                    'error': 'Este DNI ya está registrado en nuestro sistema'
+                }), 400
+        except:
+            pass  # Si hay error al conectar con la API, continuamos con RENIEC
+
+        # Llamada a API externa de DNI (RENIEC)
         TOKEN = "avaloshua_dhvvcg2502"
         url = f"http://go.net.pe:3000/api/v2/dni/{dni}"
         headers = {'Authorization': f'Bearer {TOKEN}'}
@@ -58,14 +78,14 @@ def consultar_dni():
 
         datos = api_data['data']
         sexo_raw = datos.get('sexo', '').upper()
-        sexo_formateado = 'Masculino' if sexo_raw == 'M' else 'Femenino' if sexo_raw == 'F' else ''
+        sexo_formateado = 'M' if sexo_raw == 'M' else 'F' if sexo_raw == 'F' else 'O'
 
         formatted_data = {
             'dni': dni,
             'nombres': datos.get('nombres', ''),
             'apellido_paterno': datos.get('apellido_paterno', ''),
             'apellido_materno': datos.get('apellido_materno', ''),
-            'sexo': sexo_formateado
+            'sexo': sexo_formateado  # Ahora en formato compatible con tu API (M/F/O)
         }
 
         return jsonify({'success': True, 'data': formatted_data})
@@ -74,4 +94,3 @@ def consultar_dni():
         return jsonify({'success': False, 'error': f'Error al conectar con RENIEC: {str(e)}'}), 503
     except Exception as e:
         return jsonify({'success': False, 'error': f'Error del servidor: {str(e)}'}), 500
-

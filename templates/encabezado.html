@@ -65,14 +65,13 @@
                     <span class="user-img"><img class="rounded-circle" src="../static/img/user-06.jpg" width="30"
                             alt="Admin">
                         <span class="status online"></span></span>
-                    <span>Usuario</span>
+                    <span>{{ user_data.Usuario }}</span> 
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="{{ url_for('perfil_P.vista_perfil') }}">Mi perfil</a>
                     <a class="dropdown-item" href="{{ url_for('editarPerfil_P.vista_editarPerfil') }}">Editar perfil</a>
 
-                    <a class="dropdown-item" href="{{ url_for('iniciarSesion_P.vista_iniciarSesion') }}">Cerrar
-                        sesión</a>
+                    <a class="dropdown-item" href="{{ url_for('iniciarSesion_P.cerrar_sesion') }}">Cerrar sesión</a>
                 </div>
             </li>
         </ul>
@@ -83,7 +82,7 @@
                 <a class="dropdown-item" href="{{ url_for('perfil_P.vista_perfil') }}">Mi perfil</a>
                 <a class="dropdown-item" href="{{ url_for('editarPerfil_P.vista_editarPerfil') }}">Editar perfil</a>
 
-                <a class="dropdown-item" href="{{ url_for('iniciarSesion_P.vista_iniciarSesion') }}">Cerrar sesión</a>
+                <a class="dropdown-item" href="{{ url_for('iniciarSesion_P.cerrar_sesion') }}">Cerrar sesión</a>
             </div>
         </div>
     </div>

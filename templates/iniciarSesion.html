@@ -82,23 +82,27 @@
                 {% endif %}
             {% endwith %}
             
-            <form method="POST" action="{{ url_for('iniciarSesion_P.vista_iniciarSesion') }}">
-                <label for="usuario">Usuario:</label>
-                <input type="text" id="usuario" name="usuario" placeholder="Ejemplo: U15219868" required>
-                
-                <label for="contraseña">Contraseña:</label>
-                <input type="password" id="contraseña" name="contraseña" required>
+        <!-- Cambios en el formulario (solo asegurar que los names coincidan) -->
+        <form method="POST" action="{{ url_for('iniciarSesion_P.vista_iniciarSesion') }}">
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="usuario" name="usuario" placeholder="Ejemplo: U15219868" required>
+            
+            <!-- Asegúrate que el name es 'contraseña' -->
+            <label for="contraseña">Contraseña:</label>
+            <input type="password" id="contraseña" name="contraseña" required>
+        <!-- Resto del formulario se mantiene igual -->
+            <div class="restablecer">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+            </div>
 
-                <div class="restablecer">
-                    <a href="#">¿Olvidaste tu contraseña?</a>
-                </div>
+            <div class="restablecer">
+                <a href="{{ url_for('registro_P.vista_registro') }}">¿No tienes cuenta? ¡Regístrate!</a>
+            </div>
 
-                <div class="restablecer">
-                    <a href="{{ url_for('registro_P.vista_registro') }}">¿No tienes cuenta? ¡Regístrate!</a>
-                </div>
+            <button type="submit" class="btn-link">Iniciar sesión</button>
+        </form>
 
-                <button type="submit" class="btn-link">Iniciar sesión</button>
-            </form>
+
         </div>
     </div>
 </body>

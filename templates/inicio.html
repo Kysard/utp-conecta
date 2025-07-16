@@ -1,51 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Inicio | UTP+Conecta</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='static/css/inicio.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='static/css/styles.css') }}">
-        
-    </head>
-    <body>
-        <header>
-            <div class="logo">
-                <img src="U.jpg" alt=""/>
-            </div>
-            <div class="top-bar">
-                <div class="search-box">
-                    <input type="text" placeholder="Buscar">
-                    <button type="button">🔍</button>
-                </div>
-                <div class="icons">
-                    <span>📄</span>
-                    <span>🔔</span>
-                    <span>👥</span>
-                    <span class="user">👤</span>
-                </div>
-            </div>
-        </header>
-
-        <div class="container">
-            <nav class="sidebar">
-                <ul>
-                    <li><a href="#">INICIO</a></li>
-                    <li><a href="#">PERFIL</a></li>
-                    <li><a href="https://sso.utp.edu.pe/auth/realms/Xpedition/protocol/openid-connect/auth?client_id=pao-web&redirect_uri=https%3A%2F%2Fclass.utp.edu.pe%2F&state=58ca84df-7ce9-43ff-8c64-fe44834fdcd6&response_mode=fragment&response_type=code&scope=openid&nonce=86f845b1-5279-40ed-855c-3f63d01f3312">UTP+CLASS</a></li>
-                    <li><a href="https://sso.utp.edu.pe/auth/realms/Xpedition/protocol/openid-connect/auth?client_id=utpmas-web&redirect_uri=https%3A%2F%2Fportal.utp.edu.pe%2Finicio&state=56783c7f-7f00-44e8-81f8-efecb3417d0e&response_mode=fragment&response_type=code&scope=openid&nonce=3ebf95ae-cff1-4bc8-bf53-d993354c46e1">UTP+PORTAL</a></li>
-                    <li><a href="salir.html">SALIR</a></li>
-                </ul>
-            </nav>
-            <main class="content">
-
-            </main>
-        </div>
-    </body>
-</html> -->
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,23 +11,32 @@
 <body>
 
     <div class="main-wrapper">
-
         {% include 'encabezado.html' %}
         {% include 'barraLateral.html' %}
-
         <div class="page-wrapper">
-
         </div>
-
     </div>
+
 
     <script src="../static/js/jquery-3.6.0.min.js"></script>
 
     <script src="../static/js/bootstrap.bundle.min.js"></script>
 
     <script src="../static/js/jquery.slimscroll.js"></script>
+
     <script src="../static/js/select2.min.js"></script>
-    <script src="../static/js/tagsinput.js"></script>
+    <script src="../static/js/moment.min.js"></script>
+
+    <script src="../static/js/fullcalendar.min.js"></script>
+    <script src="../static/js/jquery.fullcalendar.js"></script>
+
+    <script src="../static/plugins/morris/morris.min.js"></script>
+    <script src="../static/plugins/raphael/raphael-min.js"></script>
+    <script src="../static/js/apexcharts.js"></script>
+    <script src="../static/js/chart-data.js"></script>
+
+    <script src="../static/js/app.js"></script>
+
 </body>
 
 </html>

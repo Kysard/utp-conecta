@@ -4,62 +4,78 @@ import logging
 
 bp = Blueprint('iniciarSesion_P', __name__, url_prefix='/')
 
-# Configuración de la API REST
-API_BASE_URL = "http://localhost:8002"  # Ajusta esta URL según donde esté alojada tu API
-LOGIN_ENDPOINT = "/api/login/login"
-TIMEOUT = 10
+# Configuración de la API
+API_URL = "http://localhost:8002/api/auth/login"
+TIMEOUT = 5  # segundos
 
 @bp.route('/', methods=['GET', 'POST'])
 def vista_iniciarSesion():
     if request.method == 'POST':
-        usuario = request.form.get('usuario', '').strip()
-        contraseña = request.form.get('contraseña', '').strip()
+        # Obtener datos del formulario
+        usuario = request.form.get('usuario')
+        contrasena = request.form.get('contraseña')  
         
-        if not usuario or not contraseña:
-            flash('Usuario y contraseña son requeridos', 'error')
-            return redirect(url_for('iniciarSesion_P.vista_iniciarSesion'))
+        # Validación simple
+        if not usuario or not contrasena:
+            flash('Por favor ingrese usuario y contraseña', 'error')
+            return render_template('iniciarSesion.html')
         
         try:
-            # Preparar los datos para la API
-            payload = {
-                "usuario": usuario,
-                "contrasena": contraseña
-            }
-            
-            headers = {
-                "Content-Type": "application/json"
-            }
-            
-            # Hacer la petición a la API
+            # Hacer petición a la API FastAPI
             response = requests.post(
-                f"{API_BASE_URL}{LOGIN_ENDPOINT}",
-                json=payload,
-                headers=headers,
+                API_URL,
+                json={
+                    "usuario": usuario,
+                    "contrasena": contrasena
+                },
                 timeout=TIMEOUT
             )
             
+            # Procesar respuesta
             if response.status_code == 200:
-                # Si la API devuelve un mensaje de éxito (ajusta según lo que devuelva tu API)
+                datos = response.json()
+                
+                # Verificar si la API devuelve los datos esperados
+                if 'usuario_data' not in datos:
+                    flash('Error en los datos recibidos del servidor', 'error')
+                    return render_template('iniciarSesion.html')
+                
+                # Almacenar datos en la sesión
+                session['user_data'] = datos['usuario_data']
+                session['token'] = datos['token']
                 session['autenticado'] = True
-                session['usuario'] = usuario
-                flash('Inicio de sesión exitoso', 'success')
+                
+                # Mensaje de bienvenida personalizado
+                nombres = datos['usuario_data']['Nombres']
+                apellido_paterno = datos['usuario_data']['ApellidoPaterno']
+                flash(f'Bienvenido {nombres} {apellido_paterno}!', 'success')
                 return redirect(url_for('inicio_P.vista_inicio'))
-            elif response.status_code == 422:
-                flash('Datos de inicio de sesión inválidos', 'error')
+
             else:
-                flash('Credenciales incorrectas', 'error')
-            
+                error_msg = response.json().get('detail', 'Credenciales incorrectas')
+                flash(error_msg, 'error')
+                
         except requests.exceptions.RequestException as e:
-            flash('El servicio de autenticación no está disponible', 'error')
             logging.error(f"Error de conexión: {e}")
-        except Exception as e:
-            flash('Error inesperado al iniciar sesión', 'error')
-            logging.error(f"Error inesperado: {e}")
+            flash('Error al conectar con el servidor. Intente nuevamente.', 'error')
     
     return render_template('iniciarSesion.html')
 
-@bp.route('/cerrar-sesion')
+@bp.route('/logout')
 def cerrar_sesion():
+    # Verificar si hay una sesión activa
+    if 'token' in session:
+        try:
+            # Llamar al endpoint de logout de la API
+            response = requests.post(
+                "http://localhost:8002/api/auth/logout",
+                headers={"Authorization": f"Bearer {session['token']}"},
+                timeout=TIMEOUT
+            )
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Error al cerrar sesión: {e}")
+    
+    # Limpiar la sesión de Flask
     session.clear()
     flash('Has cerrado sesión correctamente', 'info')
     return redirect(url_for('iniciarSesion_P.vista_iniciarSesion'))

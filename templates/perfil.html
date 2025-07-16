@@ -45,35 +45,35 @@
 									<div class="row">
 										<div class="col-md-5">
 											<div class="profile-info-left">
-												<h3 class="user-name m-t-0">ALUMNO</h3>
+												<h3 class="user-name m-t-0">{{ user_data.Nombres }} {{ user_data.ApellidoPaterno }} {{ user_data.ApellidoMaterno }}</h3>
 												<h5 class="company-role m-t-0 m-b-0">UNIVERSIDAD TECNOLOGICA DEL PERÚ
 												</h5>
 												<small class="text-muted"></small>
-												<div class="staff-id">DNI: 73805836</div>
+												<div class="staff-id">DNI: {{ user_data.DNI }}</div>
 											</div>
 										</div>
 										<div class="col-md-7">
 											<ul class="personal-info">
 												<li>
 													<span class="title">Telefono:</span>
-													<span class="text"><a href="">973-584-589</a></span>
+													<span class="text"><a href="">{{ user_data.Telefono }}</a></span>
 												</li>
 												<li>
 													<span class="title">Correo Electronico:</span>
 													<span class="text"><a href=""><span class="__cf_email__"
-																data-cfemail="422827242427303b2f352d2c2502273a232f322e276c212d2f">[email&#160;protected]</span></a></span>
+																data-cfemail="422827242427303b2f352d2c2502273a232f322e276c212d2f">{{ user_data.Email }}</span></a></span>
 												</li>
 												<li>
 													<span class="title">Fecha de Nacimiento:</span>
-													<span class="text">01/09/2003</span>
+													<span class="text">{{ user_data.FechaNacimiento }}</span>
 												</li>
 												<li>
 													<span class="title">Direccion:</span>
-													<span class="text">Villa el salvador</span>
+													<span class="text">{{ user_data.Direccion }}</span>
 												</li>
 												<li>
 													<span class="title">Genero:</span>
-													<span class="text">Masculino</span>
+													<span class="text">{{ user_data.Genero }}</span>
 												</li>
 											</ul>
 										</div>
