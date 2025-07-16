@@ -66,22 +66,25 @@
                                 <div class="card-body">
                                     <form id="formEditarPerfil">
                                         <div class="form-columns">
+
                                             <!-- Columna Izquierda -->
                                             <div class="form-left-column">
                                                 <div class="form-group">
                                                     <label>Nombre</label>
                                                     <input type="text" class="form-control" name="Nombres"
-                                                        value="{{ user_data.Nombres }}" required>
+                                                        value="{{ user_data.Nombres if user_data.Nombres else '' }}"
+                                                        required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Apellido Paterno</label>
                                                     <input type="text" class="form-control" name="ApellidoPaterno"
-                                                        value="{{ user_data.ApellidoPaterno }}" required>
+                                                        value="{{ user_data.ApellidoPaterno if user_data.ApellidoPaterno else '' }}"
+                                                        required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Apellido Materno</label>
                                                     <input type="text" class="form-control" name="ApellidoMaterno"
-                                                        value="{{ user_data.ApellidoMaterno }}">
+                                                        value="{{ user_data.ApellidoMaterno if user_data.ApellidoMaterno else '' }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Género</label>
@@ -101,27 +104,43 @@
                                                 <div class="form-group">
                                                     <label>Teléfono</label>
                                                     <input type="tel" class="form-control" name="Telefono"
-                                                        value="{{ user_data.Telefono }}">
+                                                        value="{{ user_data.Telefono if user_data.Telefono else '' }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Email</label>
                                                     <input type="email" class="form-control" name="Email"
-                                                        value="{{ user_data.Email }}">
+                                                        value="{{ user_data.Email if user_data.Email else '' }}">
                                                 </div>
+
                                                 <div class="form-group">
                                                     <label>Fecha de Nacimiento</label>
-                                                    <input type="date" class="form-control datetimepicker"
-                                                        name="FechaNacimiento"
-                                                        value="{{ user_data.FechaNacimiento if user_data.FechaNacimiento else '' }}">
+                                                    <div class="input-group date" id="datetimepicker1"
+                                                        data-target-input="nearest">
+                                                        <input type="date" class="form-control" name="FechaNacimiento"
+                                                            value="{{ user_data.FechaNacimiento_formatted if user_data.FechaNacimiento_formatted else '' }}">
+                                           
+                                                    </div>
                                                 </div>
+
+                                                <script>
+                                                    $(document).ready(function () {
+                                                        $('#datetimepicker1').datetimepicker({
+                                                            format: 'YYYY-MM-DD',
+                                                            locale: 'es'
+                                                        });
+                                                    });
+                                                </script>
                                             </div>
+
+
+
                                         </div>
 
                                         <!-- Campos de ancho completo -->
                                         <div class="form-group">
                                             <label>Dirección</label>
                                             <textarea class="form-control"
-                                                name="Direccion">{{ user_data.Direccion }}</textarea>
+                                                name="Direccion">{{ user_data.Direccion if user_data.Direccion else '' }}</textarea>
                                         </div>
 
                                         <div class="form-group">
@@ -179,7 +198,7 @@
                 genero: $('select[name="Genero"]').val(),
                 telefono: $('input[name="Telefono"]').val(),
                 email: $('input[name="Email"]').val(),
-                fecha_nacimiento: $('input[name="FechaNacimiento"]').val(),
+                fecha_nacimiento: moment($('input[name="FechaNacimiento"]').val()).format('YYYY-MM-DD'),
                 direccion: $('textarea[name="Direccion"]').val()
             };
 
