@@ -13,14 +13,20 @@
             flex-wrap: wrap;
             justify-content: space-between;
         }
-        .form-left-column, .form-right-column {
+
+        .form-left-column,
+        .form-right-column {
             width: 48%;
         }
+
         @media (max-width: 768px) {
-            .form-left-column, .form-right-column {
+
+            .form-left-column,
+            .form-right-column {
                 width: 100%;
             }
         }
+
         .form-actions {
             width: 100%;
             text-align: center;
@@ -64,58 +70,69 @@
                                             <div class="form-left-column">
                                                 <div class="form-group">
                                                     <label>Nombre</label>
-                                                    <input type="text" class="form-control" name="Nombres" value="{{ user_data.Nombres }}" required>
+                                                    <input type="text" class="form-control" name="Nombres"
+                                                        value="{{ user_data.Nombres }}" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Apellido Paterno</label>
-                                                    <input type="text" class="form-control" name="ApellidoPaterno" value="{{ user_data.ApellidoPaterno }}" required>
+                                                    <input type="text" class="form-control" name="ApellidoPaterno"
+                                                        value="{{ user_data.ApellidoPaterno }}" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Apellido Materno</label>
-                                                    <input type="text" class="form-control" name="ApellidoMaterno" value="{{ user_data.ApellidoMaterno }}">
+                                                    <input type="text" class="form-control" name="ApellidoMaterno"
+                                                        value="{{ user_data.ApellidoMaterno }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Género</label>
                                                     <select class="form-control select" name="Genero" required>
-                                                        <option value="M" {% if user_data.Genero == 'M' %}selected{% endif %}>Masculino</option>
-                                                        <option value="F" {% if user_data.Genero == 'F' %}selected{% endif %}>Femenino</option>
-                                                        <option value="O" {% if user_data.Genero == 'O' %}selected{% endif %}>Otro</option>
+                                                        <option value="M" {% if user_data.Genero=='M' %}selected{% endif
+                                                            %}>Masculino</option>
+                                                        <option value="F" {% if user_data.Genero=='F' %}selected{% endif
+                                                            %}>Femenino</option>
+                                                        <option value="O" {% if user_data.Genero=='O' %}selected{% endif
+                                                            %}>Otro</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            
+
                                             <!-- Columna Derecha -->
                                             <div class="form-right-column">
                                                 <div class="form-group">
                                                     <label>Teléfono</label>
-                                                    <input type="tel" class="form-control" name="Telefono" value="{{ user_data.Telefono }}">
+                                                    <input type="tel" class="form-control" name="Telefono"
+                                                        value="{{ user_data.Telefono }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Email</label>
-                                                    <input type="email" class="form-control" name="Email" value="{{ user_data.Email }}">
+                                                    <input type="email" class="form-control" name="Email"
+                                                        value="{{ user_data.Email }}">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Fecha de Nacimiento</label>
-                                                    <input type="date" class="form-control datetimepicker" name="FechaNacimiento" 
+                                                    <input type="date" class="form-control datetimepicker"
+                                                        name="FechaNacimiento"
                                                         value="{{ user_data.FechaNacimiento if user_data.FechaNacimiento else '' }}">
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Campos de ancho completo -->
                                         <div class="form-group">
                                             <label>Dirección</label>
-                                            <textarea class="form-control" name="Direccion">{{ user_data.Direccion }}</textarea>
+                                            <textarea class="form-control"
+                                                name="Direccion">{{ user_data.Direccion }}</textarea>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label>Cargar Imagen</label>
                                             <input type="file" name="pic" accept="image/*" class="form-control">
                                         </div>
-                                        
+
                                         <!-- Botones de acción -->
                                         <div class="form-actions">
-                                            <button class="btn btn-primary mr-2" type="button" onclick="actualizarPerfil()">Guardar</button>
+                                            <button class="btn btn-primary mr-2" type="button"
+                                                onclick="actualizarPerfil()">Guardar</button>
                                             <button class="btn btn-secondary" type="reset">Cancelar</button>
                                         </div>
                                     </form>
@@ -138,70 +155,73 @@
 
     <script>
         // Inicializar select2 y datetimepicker
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.select').select2();
-            
+
             $('.datetimepicker').datetimepicker({
                 format: 'YYYY-MM-DD',
                 locale: 'es'
             });
         });
 
+
         function actualizarPerfil() {
             // Mostrar spinner en el botón
-            $('button').prop('disabled', true);
-            $('.btn-primary').html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
-            
+            const btn = $('.btn-primary');
+            btn.prop('disabled', true);
+            btn.html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+
             // Obtener datos del formulario
             const formData = {
-                Nombres: $('input[name="Nombres"]').val(),
-                ApellidoPaterno: $('input[name="ApellidoPaterno"]').val(),
-                ApellidoMaterno: $('input[name="ApellidoMaterno"]').val(),
-                Genero: $('select[name="Genero"]').val(),
-                Telefono: $('input[name="Telefono"]').val(),
-                Email: $('input[name="Email"]').val(),
-                FechaNacimiento: $('input[name="FechaNacimiento"]').val(),
-                Direccion: $('textarea[name="Direccion"]').val()
+                nombres: $('input[name="Nombres"]').val(),
+                apellido_paterno: $('input[name="ApellidoPaterno"]').val(),
+                apellido_materno: $('input[name="ApellidoMaterno"]').val(),
+                genero: $('select[name="Genero"]').val(),
+                telefono: $('input[name="Telefono"]').val(),
+                email: $('input[name="Email"]').val(),
+                fecha_nacimiento: $('input[name="FechaNacimiento"]').val(),
+                direccion: $('textarea[name="Direccion"]').val()
             };
-            
-            // Filtrar campos vacíos
-            const datosActualizacion = {};
+
+            // Crear FormData para enviar los datos
+            const formDataToSend = new FormData();
             for (const key in formData) {
-                if (formData[key] !== '') {
-                    datosActualizacion[key] = formData[key];
+                if (formData[key] !== null && formData[key] !== undefined && formData[key] !== '') {
+                    formDataToSend.append(key, formData[key]);
                 }
             }
-            
-            // Obtener DNI del usuario
-            const dni = "{{ user_data.DNI }}";
-            
+
             // Llamar a la API
-            fetch(`/actualizar_perfil/${dni}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(datosActualizacion)
+            fetch('/actualizar_perfil', {
+                method: 'POST',
+                body: formDataToSend
             })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => { throw err; });
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert('Perfil actualizado correctamente');
-                window.location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error al actualizar perfil: ' + (error.detail || error.message || 'Error desconocido'));
-            })
-            .finally(() => {
-                $('button').prop('disabled', false);
-                $('.btn-primary').html('Guardar');
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw err; });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === "success") {
+                        alert('Perfil actualizado correctamente');
+                        window.location.reload();
+                    } else {
+                        throw new Error(data.message || 'Error desconocido');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al actualizar perfil: ' + (error.message || 'Error desconocido'));
+                })
+                .finally(() => {
+                    btn.prop('disabled', false);
+                    btn.html('Guardar');
+                });
         }
+
+
     </script>
 </body>
+
 </html>

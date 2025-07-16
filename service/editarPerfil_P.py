@@ -8,12 +8,10 @@
 #     user_data = session.get('user_data')
 #     return render_template('editarPerfil.html', user_data=user_data)
 
-
-
 from flask import render_template, session, request, redirect, url_for, flash, jsonify
 import requests
 from flask import Blueprint
-from datetime import datetime  # Añade esta importación
+from datetime import datetime
 
 bp = Blueprint('editarPerfil_P', __name__, url_prefix='/')
 
@@ -24,12 +22,10 @@ def vista_editarPerfil():
     user_data = session.get('user_data')
     if not user_data:
         flash("Por favor inicie sesión primero", "error")
-        return redirect(url_for('login'))  # Ajusta según tu ruta de login
+        return redirect(url_for('login'))
     
-    # Convertir FechaNacimiento de string a datetime si existe
     if 'FechaNacimiento' in user_data and user_data['FechaNacimiento']:
         try:
-            # Asume que la fecha viene en formato 'YYYY-MM-DD' desde la API
             user_data['FechaNacimiento_dt'] = datetime.strptime(user_data['FechaNacimiento'], '%Y-%m-%d')
         except (ValueError, TypeError):
             user_data['FechaNacimiento_dt'] = None
@@ -46,7 +42,7 @@ def actualizar_perfil():
         return jsonify({"status": "error", "message": "DNI no encontrado en sesión"}), 400
     
     try:
-        # Preparar los datos para la API
+        # Mapear los nombres de los campos del formulario a los que espera la API
         datos_actualizacion = {
             "Nombres": request.form.get('nombres'),
             "ApellidoPaterno": request.form.get('apellido_paterno'),
@@ -58,42 +54,39 @@ def actualizar_perfil():
             "FechaNacimiento": request.form.get('fecha_nacimiento')
         }
         
-        # Filtrar campos vacíos
+        # Filtrar campos vacíos o nulos
         datos_actualizacion = {k: v for k, v in datos_actualizacion.items() if v is not None and v != ''}
+        
+        if not datos_actualizacion:
+            return jsonify({"status": "error", "message": "No se proporcionaron datos para actualizar"}), 400
         
         # Llamar a la API
         response = requests.put(
-            f"{API_BASE_URL}/api/actualizar/{dni}",
-            json=datos_actualizacion
+            f"{API_BASE_URL}/api/usuario/actualizar/{dni}",
+            json=datos_actualizacion,
+            headers={'Content-Type': 'application/json'}
         )
         
         if response.status_code == 200:
             # Actualizar los datos en la sesión
             user_data = session['user_data']
             for key, value in datos_actualizacion.items():
-                if key != "FechaNacimiento":  # Manejo especial para fechas
-                    user_data[key] = value
-                else:
-                    # Guardar la fecha como string
-                    user_data[key] = value
+                user_data[key] = value
             
             session['user_data'] = user_data
             session.modified = True
             
             return jsonify({"status": "success", "message": "Perfil actualizado correctamente"})
         else:
-            error_data = response.json()
-            return jsonify({"status": "error", "message": error_data.get("detail", "Error al actualizar perfil")}), response.status_code
+            # Manejar errores de la API
+            try:
+                error_data = response.json()
+                return jsonify({"status": "error", "message": error_data.get("detail", "Error al actualizar perfil")}), response.status_code
+            except ValueError:
+                return jsonify({"status": "error", "message": f"Error en la API: {response.text}"}), response.status_code
             
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-    
-
-
-
-
-
-
 
 
 

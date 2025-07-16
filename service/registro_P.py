@@ -4,10 +4,10 @@ import requests
 bp = Blueprint('registro_P', __name__, url_prefix='/')
 
 # Configuración de la API
-FASTAPI_URL = "http://localhost:8002/api/registro"  
+FASTAPI_URL = "http://localhost:8002/api/usuario"  
 
 # Ruta para mostrar el formulario y procesar el registro
-@bp.route('/registro', methods=['GET', 'POST'])
+@bp.route('registro', methods=['GET', 'POST'])
 def vista_registro():
     if request.method == 'POST':
         try:
@@ -85,7 +85,7 @@ def consultar_dni():
             'nombres': datos.get('nombres', ''),
             'apellido_paterno': datos.get('apellido_paterno', ''),
             'apellido_materno': datos.get('apellido_materno', ''),
-            'sexo': sexo_formateado  # Ahora en formato compatible con tu API (M/F/O)
+            'sexo': sexo_formateado 
         }
 
         return jsonify({'success': True, 'data': formatted_data})
