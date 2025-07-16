@@ -1,0 +1,112 @@
+CREATE TABLE usuarios (
+    IdUsuario INT IDENTITY(1,1) PRIMARY KEY,
+    DNI VARCHAR(8) NOT NULL UNIQUE,
+    Nombres VARCHAR(100) NOT NULL,
+    ApellidoPaterno VARCHAR(50) NOT NULL,
+    ApellidoMaterno VARCHAR(50) NOT NULL,
+    Genero VARCHAR(1) NOT NULL CHECK (Genero IN ('M', 'F', 'O')),
+    TipoUsuario VARCHAR(20) NOT NULL CHECK (TipoUsuario IN ('Alumno', 'Profesor', 'Administrativo')) DEFAULT 'Alumno',
+    Usuario VARCHAR(50) NOT NULL UNIQUE,
+    Contrasena VARCHAR(100) NOT NULL,
+    Telefono VARCHAR(15) NULL,
+    Email VARCHAR(100) NULL UNIQUE,
+    Direccion VARCHAR(200) NULL,
+    FechaNacimiento DATE NULL,
+    FotoPerfil VARCHAR(255) NULL,
+    FechaRegistro DATETIME DEFAULT GETDATE(),
+    Activo BIT DEFAULT 1,
+);
+CREATE INDEX IX_Usuarios_DNI ON Usuarios(DNI);
+CREATE INDEX IX_Usuarios_Usuario ON Usuarios(Usuario);
+CREATE INDEX IX_Usuarios_TipoUsuario ON Usuarios(TipoUsuario);
+
+--------------------------------------------------------------
+
+CREATE TABLE BlogPosts (
+    IdPost INT IDENTITY(1,1) PRIMARY KEY,
+    IdUsuario INT NOT NULL,
+    Titulo VARCHAR(255) NOT NULL,
+    Contenido NVARCHAR(MAX) NOT NULL,
+    FechaPublicacion DATETIME DEFAULT GETDATE(),
+    FechaActualizacion DATETIME NULL,
+    Estado VARCHAR(10) CHECK (Estado IN ('Activo', 'Inactivo', 'Borrador')) DEFAULT 'Activo',
+    Visitas INT DEFAULT 0,
+    FOREIGN KEY (IdUsuario) REFERENCES Usuarios(IdUsuario)
+);
+
+CREATE TABLE Categorias (
+    IdCategoria INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    Descripcion VARCHAR(255) NULL,
+    Icono VARCHAR(50) NULL
+);
+
+CREATE TABLE Subcategorias (
+    IdSubcategoria INT IDENTITY(1,1) PRIMARY KEY,
+    IdCategoria INT NOT NULL,
+    Nombre VARCHAR(50) NOT NULL,
+    Descripcion VARCHAR(255) NULL,
+    FOREIGN KEY (IdCategoria) REFERENCES Categorias(IdCategoria)
+);
+
+CREATE TABLE PostCategorias (
+    IdPost INT NOT NULL,
+    IdSubcategoria INT NOT NULL,
+    PRIMARY KEY (IdPost, IdSubcategoria),
+    FOREIGN KEY (IdPost) REFERENCES BlogPosts(IdPost),
+    FOREIGN KEY (IdSubcategoria) REFERENCES Subcategorias(IdSubcategoria)
+);
+
+CREATE TABLE Multimedia (
+    IdMultimedia INT IDENTITY(1,1) PRIMARY KEY,
+    IdPost INT NOT NULL,
+    Tipo VARCHAR(10) CHECK (Tipo IN ('Imagen', 'Video', 'Documento')),
+    RutaArchivo VARCHAR(255) NOT NULL,
+    NombreOriginal VARCHAR(255) NOT NULL,
+    Tamano INT NOT NULL, -- en bytes
+    FechaSubida DATETIME DEFAULT GETDATE(),
+    Orden INT DEFAULT 0,
+    FOREIGN KEY (IdPost) REFERENCES BlogPosts(IdPost)
+);
+
+--------------------------------------------------------------------------
+-- Insertar categorías principales
+INSERT INTO Categorias (Nombre, Descripcion, Icono) VALUES
+('Vida Universitaria', 'Noticias y actividades de la vida universitaria en UTP', 'fa-university'),
+('Académico', 'Contenido académico y recursos para estudiantes', 'fa-book'),
+('Eventos', 'Eventos, talleres, charlas y conferencias en la universidad', 'fa-calendar'),
+('Bienestar Estudiantil', 'Servicios de apoyo al estudiante y consejos de bienestar', 'fa-heartbeat'),
+('Tecnología e Innovación', 'Proyectos, avances y novedades tecnológicas en UTP', 'fa-microchip'),
+('Administrativo', 'Trámites, procesos y anuncios institucionales', 'fa-cogs');
+
+-- Insertar subcategorías relacionadas
+INSERT INTO Subcategorias (IdCategoria, Nombre, Descripcion) VALUES
+-- Vida Universitaria
+(1, 'Noticias UTP', 'Novedades institucionales y comunicados oficiales'),
+(1, 'Experiencias estudiantiles', 'Testimonios y experiencias de alumnos UTP'),
+(1, 'Vida en campus', 'Actividades sociales, culturales y deportivas en el campus'),
+
+-- Académico
+(2, 'Recursos de estudio', 'Guías, apuntes y materiales de apoyo académico'),
+(2, 'Carreras y programas', 'Información y orientación sobre carreras UTP'),
+(2, 'Tips para estudiar', 'Consejos para mejorar el rendimiento académico'),
+
+-- Eventos
+(3, 'Charlas y conferencias', 'Sesiones académicas y profesionales'),
+(3, 'Talleres', 'Capacitaciones y actividades prácticas'),
+(3, 'Ferias UTP', 'Ferias académicas, tecnológicas y laborales'),
+
+-- Bienestar Estudiantil
+(4, 'Psicología y orientación', 'Consejería y apoyo emocional'),
+(4, 'Servicios al estudiante', 'Atenciones, becas, asesorías y beneficios'),
+(4, 'Deporte y salud', 'Programas deportivos y cuidado físico'),
+
+-- Tecnología e Innovación
+(5, 'Proyectos estudiantiles', 'Innovaciones de alumnos y concursos'),
+(5, 'Laboratorios UTP', 'Instalaciones y recursos tecnológicos'),
+(5, 'Tendencias tecnológicas', 'Avances y noticias del mundo tech'),
+
+-- Administrativo
+(6, 'Trámites y procesos', 'Guías para matrícula, pagos y documentos'),
+(6, 'Calendario académico', 'Fechas importantes y cronogramas'),
+(6, 'Comunicados oficiales', 'Avisos y resoluciones institucionales');

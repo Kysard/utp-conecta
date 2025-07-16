@@ -3,7 +3,7 @@ from flask import Flask
 from service import agregarBlog_P, blog_P, chat_P, editarBlog_P, editarPerfil_P, iniciarSesion_P, inicio_P, registro_P, perfil_P, verBlog_P
 
 app = Flask(__name__)
-app.secret_key = 'clave-secreta-utp-conecta-2023' 
+app.secret_key = '28kfts4;\!Ieo2U@s4S3fFq$&' 
 
 # Registrar blueprints
 app.register_blueprint(iniciarSesion_P.bp)

@@ -2,144 +2,254 @@
 <html lang="es">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Agregar Blog | UTP Conecta +</title>
-	{% include 'head.html' %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Blog | UTP Conecta +</title>
+    {% include 'head.html' %}
+    <style>
+        .preview-imagen {
+            max-width: 100px;
+            max-height: 100px;
+            margin: 5px;
+        }
+        .thumbnail-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .thumbnail-item {
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .thumbnail-remove {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="main-wrapper">
+        {% include 'encabezado.html' %}
+        {% include 'barraLateral.html' %}
 
+        <div class="page-wrapper">
+            <div class="content container-fluid">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <h5 class="text-uppercase mb-0 mt-0 page-title">Agregar blog</h5>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <ul class="breadcrumb float-right p-0 mb-0">
+                                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                                <li class="breadcrumb-item"><a href="#">Blog</a></li>
+                                <li class="breadcrumb-item"><span> Agregar blog</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form id="blogForm" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label>Nombre del blog</label>
+                                        <input type="text" class="form-control" name="titulo" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Imágenes del blog</label>
+                                        <input type="file" id="imagenesInput" name="imagenes" 
+                                               accept="image/jpeg, image/png, image/gif" 
+                                               class="form-control" multiple>
+                                        <small class="form-text text-muted">Tamaño máximo de archivo: 50 MB. Imágenes
+                                            permitidas: jpg, gif, png. Máximo 10 imágenes solamente.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="thumbnail-container" id="previewContainer">
+                                            <!-- Las previsualizaciones de imágenes aparecerán aquí -->
+                                        </div>
+                                    </div>
 
-	<div class="main-wrapper">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Categoría del blog</label>
+                                                <select class="form-control select" id="categoria" name="categoria" required>
+                                                    <option value="">Seleccione una categoría</option>
+                                                    {% for id, categoria in categorias.items() %}
+                                                        <option value="{{ id }}">{{ categoria.nombre }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Subcategoría del blog</label>
+                                                <select class="form-control select" id="subcategoria" name="subcategoria" required>
+                                                    <option value="">Seleccione una subcategoría</option>
+                                                    <!-- Las subcategorías se llenarán dinámicamente con JavaScript -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Descripción del blog</label>
+                                        <textarea class="form-control" name="contenido" rows="5" required></textarea>
+                                    </div>
+                                    <div class="m-t-20 text-center">
+                                        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Publicar blog</button>
+                                        <div id="loadingSpinner" class="spinner-border text-primary hidden" role="status">
+                                            <span class="sr-only">Cargando...</span>
+                                        </div>
+                                    </div>
+                                    <div id="resultMessage" class="mt-3"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-		{% include 'encabezado.html' %}
+    <script src="../static/js/jquery-3.6.0.min.js"></script>
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/js/jquery.slimscroll.js"></script>
+    <script src="../static/js/select2.min.js"></script>
+    <script src="../static/js/moment.min.js"></script>
+    <script src="../static/js/app.js"></script>
 
-
-		{% include 'barraLateral.html' %}
-
-		<div class="page-wrapper">
-			<div class="content container-fluid">
-				<div class="page-header">
-					<div class="row">
-						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
-							<h5 class="text-uppercase mb-0 mt-0 page-title">Agregar blog</h5>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-6 col-12">
-							<ul class="breadcrumb float-right p-0 mb-0">
-								<li class="breadcrumb-item"><a href="#">Inicio</a></li>
-								<li class="breadcrumb-item"><a href="#">Blog</a></li>
-								<li class="breadcrumb-item"><span> Agregar blog</span></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="card">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-md-12">
-								<form>
-									<div class="form-group">
-										<label>Nombre del blog</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label>Imágenes del blog</label>
-										<input type="file" name="pic" accept="image/*" class="form-control">
-										<small class="form-text text-muted">Tamaño máximo de archivo: 50 MB. Imágenes
-											permitidas: jpg, gif, png. Máximo 10 imágenes solamente.</small>
-									</div>
-									<div class="form-group">
-										<div class="row">
-											<div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-												<div class="product-thumbnail">
-													<img src="../static/img/blog/blog-thumb-01.jpg"
-														class="img-thumbnail img-fluid" alt="">
-													<span class="product-remove" title="eliminar"><i
-															class="fas fa-times"></i></span>
-												</div>
-											</div>
-											<div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-												<div class="product-thumbnail">
-													<img src="../static/img/placeholder-thumb.jpg"
-														class="img-thumbnail img-fluid" alt="">
-													<span class="product-remove" title="eliminar"><i
-															class="fas fa-times"></i></span>
-												</div>
-											</div>
-											<div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-												<div class="product-thumbnail">
-													<img src="../static/img/placeholder-thumb.jpg"
-														class="img-thumbnail img-fluid" alt="">
-													<span class="product-remove" title="eliminar"><i
-															class="fas fa-times"></i></span>
-												</div>
-											</div>
-											<div class="col-md-3 col-sm-3 col-4 col-lg-3 col-xl-2">
-												<div class="product-thumbnail">
-													<img src="../static/img/placeholder-thumb.jpg"
-														class="img-thumbnail img-fluid" alt="">
-													<span class="product-remove" title="eliminar"><i
-															class="fas fa-times"></i></span>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<div class="row">
-										<div class="col-md-6">
-											<div class="form-group">
-												<label>Categoría del blog</label>
-												<select class="form-control select">
-													<option>Biblioteca</option>
-													<option>Deporte</option>
-													<option>Gestión</option>
-												</select>
-											</div>
-										</div>
-										<div class="col-lg-6 col-md-6">
-											<div class="form-group">
-												<label>Subcategoría del blog</label>
-												<select class="form-control select">
-													<option>Ingeniería de Sistemas</option>
-													<option>Administración</option>
-													<option>Marketing</option>
-													<option>Contabilidad</option>
-													<option>Psicología</option>
-													<option>Ingeniería Industrial</option>
-													<option>Comunicación</option>
-													<option>Medicina</option>
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label>Descripción del blog</label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="m-t-20 text-center">
-										<button class="btn btn-primary btn-lg">Publicar blog</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script src="../static/js/jquery-3.6.0.min.js"></script>
-
-	<script src="../static/js/bootstrap.bundle.min.js"></script>
-
-	<script src="../static/js/jquery.slimscroll.js"></script>
-
-	<script src="../static/js/select2.min.js"></script>
-	<script src="../static/js/moment.min.js"></script>
-
-	<script src="../static/js/app.js"></script>
-
+    <script>
+        $(document).ready(function() {
+            // Inicializar select2
+            $('.select').select2();
+            
+            // Cargar subcategorías cuando se selecciona una categoría
+            $('#categoria').change(function() {
+                const categoriaId = $(this).val();
+                const subcategoriaSelect = $('#subcategoria');
+                
+                subcategoriaSelect.empty().append('<option value="">Seleccione una subcategoría</option>');
+                
+                if (categoriaId) {
+                    const categoriasData = JSON.parse('{{ categorias|tojson|safe }}');
+                    const subcategorias = categoriasData[categoriaId]?.subcategorias || [];
+                    
+                    subcategorias.forEach(sub => {
+                        subcategoriaSelect.append(`<option value="${sub.id}">${sub.nombre}</option>`);
+                    });
+                }
+            });
+            
+            // Previsualización de imágenes
+            $('#imagenesInput').change(function() {
+                const files = this.files;
+                const previewContainer = $('#previewContainer');
+                previewContainer.empty();
+                
+                if (files.length > 10) {
+                    alert('Solo puedes subir un máximo de 10 imágenes');
+                    $(this).val('');
+                    return;
+                }
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    
+                    // Validar tipo de archivo
+                    if (!file.type.match('image.*')) {
+                        continue;
+                    }
+                    
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        previewContainer.append(`
+                            <div class="thumbnail-item">
+                                <img src="${e.target.result}" class="preview-imagen img-thumbnail">
+                                <div class="thumbnail-remove" data-index="${i}">×</div>
+                            </div>
+                        `);
+                    }
+                    
+                    reader.readAsDataURL(file);
+                }
+                
+                // Manejar eliminación de previsualizaciones
+                $('.thumbnail-remove').click(function() {
+                    const index = $(this).data('index');
+                    const filesInput = $('#imagenesInput')[0];
+                    const files = Array.from(filesInput.files);
+                    
+                    files.splice(index, 1);
+                    
+                    // Crear una nueva DataTransfer y reasignar los archivos
+                    const dataTransfer = new DataTransfer();
+                    files.forEach(file => dataTransfer.items.add(file));
+                    filesInput.files = dataTransfer.files;
+                    
+                    // Volver a generar las previsualizaciones
+                    $('#imagenesInput').trigger('change');
+                });
+            });
+            
+            // Enviar formulario
+            $('#blogForm').submit(function(e) {
+                e.preventDefault();
+                
+                const submitBtn = $('#submitBtn');
+                const loadingSpinner = $('#loadingSpinner');
+                const resultMessage = $('#resultMessage');
+                
+                submitBtn.prop('disabled', true);
+                loadingSpinner.removeClass('hidden');
+                resultMessage.empty().removeClass('alert-success alert-danger');
+                
+                const formData = new FormData(this);
+                
+                $.ajax({
+                    url: '/agregarBlog',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        resultMessage.addClass('alert alert-success')
+                            .html('¡Blog creado exitosamente!');
+                        $('#blogForm')[0].reset();
+                        $('#previewContainer').empty();
+                    },
+                    error: function(xhr) {
+                        let errorMsg = 'Error al crear el blog';
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMsg = xhr.responseJSON.error;
+                        }
+                        resultMessage.addClass('alert alert-danger')
+                            .html(errorMsg);
+                    },
+                    complete: function() {
+                        submitBtn.prop('disabled', false);
+                        loadingSpinner.addClass('hidden');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
-
 </html>
