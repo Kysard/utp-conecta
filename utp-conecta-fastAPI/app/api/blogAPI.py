@@ -143,3 +143,119 @@ async def obtener_categorias_completas(conn = Depends(get_db_connection)):
         )
     finally:
         cursor.close()
+
+@router.get("/blogs-usuario/{id_usuario}", response_model=List[dict])
+async def obtener_blogs_usuario(
+    id_usuario: int,
+    estado: Optional[str] = None,
+    conn = Depends(get_db_connection)
+):
+    cursor = conn.cursor()
+    try:
+        # Consulta base para obtener los posts del usuario
+        query = """
+            SELECT 
+                bp.IdPost, bp.Titulo, bp.Contenido, 
+                bp.FechaPublicacion, bp.FechaActualizacion,
+                bp.Estado, bp.Visitas,
+                u.IdUsuario, u.Nombres, u.ApellidoPaterno, u.ApellidoMaterno,
+                u.FotoPerfil, u.TipoUsuario
+            FROM BlogPosts bp
+            JOIN Usuarios u ON bp.IdUsuario = u.IdUsuario
+            WHERE bp.IdUsuario = ?
+        """
+        
+        params = [id_usuario]
+        
+        # Filtrar por estado si se proporciona
+        if estado:
+            query += " AND bp.Estado = ?"
+            params.append(estado)
+        
+        query += " ORDER BY bp.FechaPublicacion DESC"
+        
+        cursor.execute(query, params)
+        posts = cursor.fetchall()
+        
+        if not posts:
+            return []
+        
+        # Estructura para almacenar los resultados
+        resultados = []
+        
+        for post in posts:
+            # Obtener categorías y subcategorías para cada post
+            cursor.execute("""
+                SELECT 
+                    c.IdCategoria, c.Nombre AS Categoria, c.Icono,
+                    sc.IdSubcategoria, sc.Nombre AS Subcategoria
+                FROM PostCategorias pc
+                JOIN Subcategorias sc ON pc.IdSubcategoria = sc.IdSubcategoria
+                JOIN Categorias c ON sc.IdCategoria = c.IdCategoria
+                WHERE pc.IdPost = ?
+            """, (post.IdPost,))
+            
+            categorias = []
+            for cat in cursor.fetchall():
+                categorias.append({
+                    "id_categoria": cat.IdCategoria,
+                    "categoria": cat.Categoria,
+                    "icono": cat.Icono,
+                    "id_subcategoria": cat.IdSubcategoria,
+                    "subcategoria": cat.Subcategoria
+                })
+            
+            # Obtener multimedia para cada post
+            cursor.execute("""
+                SELECT 
+                    IdMultimedia, Tipo, RutaArchivo, 
+                    NombreOriginal, Tamano, FechaSubida, Orden
+                FROM Multimedia
+                WHERE IdPost = ?
+                ORDER BY Orden
+            """, (post.IdPost,))
+            
+            multimedia = []
+            for media in cursor.fetchall():
+                multimedia.append({
+                    "id": media.IdMultimedia,
+                    "tipo": media.Tipo,
+                    "ruta": media.RutaArchivo,
+                    "nombre_original": media.NombreOriginal,
+                    "tamano": media.Tamano,
+                    "fecha_subida": media.FechaSubida,
+                    "orden": media.Orden
+                })
+            
+            # Construir el objeto del post
+            post_data = {
+                "id_post": post.IdPost,
+                "titulo": post.Titulo,
+                "contenido": post.Contenido,
+                "fecha_publicacion": post.FechaPublicacion,
+                "fecha_actualizacion": post.FechaActualizacion,
+                "estado": post.Estado,
+                "visitas": post.Visitas,
+                "usuario": {
+                    "id": post.IdUsuario,
+                    "nombres": post.Nombres,
+                    "apellido_paterno": post.ApellidoPaterno,
+                    "apellido_materno": post.ApellidoMaterno,
+                    "foto_perfil": post.FotoPerfil,
+                    "tipo_usuario": post.TipoUsuario
+                },
+                "categorias": categorias,
+                "multimedia": multimedia
+            }
+            
+            resultados.append(post_data)
+        
+        return resultados
+    
+    except pyodbc.Error as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error en la base de datos: {str(e)}"
+        )
+    finally:
+        cursor.close()

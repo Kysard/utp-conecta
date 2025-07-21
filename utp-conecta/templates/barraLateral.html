@@ -20,14 +20,13 @@
                     <a href="#"><img src="../static/img/sidebar/icon-12.png" alt="icon"> <span> Blog</span> <span
                             class="menu-arrow"></span></a>
                     <ul class="list-unstyled" style="display: none;">
-                        <li><a href="{{ url_for('blog_P.vista_blog') }}"><span>Blog</span></a></li>
-                        <li><a href="{{ url_for('verBlog_P.vista_verBlog') }}"><span>Ver blog</span></a></li>
-                        <li><a href="{{ url_for('agregarBlog_P.vista_agregarBlog') }}"><span>Agregar blog</span></a>
-                        </li>
+                        <!-- <li><a href="{{ url_for('verBlog_P.vista_verBlog') }}"><span>Ver mis blogs</span></a></li> -->
+                        <li><a href="{{ url_for('agregarBlog_P.vista_agregarBlog') }}"><span>Agregar blog</span></a></li>
+                        <li><a href="{{ url_for('blog_P.vista_blog') }}"><span>Mis Blog</span></a></li>
                         <li><a href="{{ url_for('editarBlog_P.vista_editarBlog') }}"><span>Editar blog</span></a></li>
                     </ul>
                 </li>
-
+                
                 <li class="submenu">
                     <a href="javascript:void(0);"><img src="../static/img/sidebar/icon-5.png" alt="icon">
                         <span>Aplicaciones</span> <span class="menu-arrow"></span></a>

@@ -3,13 +3,14 @@ import pyodbc
 
 router = APIRouter()
 
-# Configuración de la conexión (ajusta estos valores según tu entorno)
+# Configuración de la conexión (ajusta estos valores según tu entorno) 
+# 52743
 DB_CONFIG = {
     'server': 'localhost',
     'database': 'UTPConecta',
     'username': 'UtpConecta',
     'password': 'Utp2025*BD',
-    'port': '52743'
+    'port': '1433'
 }
 
 def get_db_connection():
