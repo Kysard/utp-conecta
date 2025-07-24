@@ -42,10 +42,6 @@ app.include_router(
 )
 
 
-# @app.get("/")
-# async def root():
-#     return {"mensaje": "Bienvenido al sistema de autenticación"}
-
 # Comando para ejecutar el servidor:
 # uvicorn app.main:app --reload --port 8002
 
