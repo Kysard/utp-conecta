@@ -1,0 +1,1 @@
+mklink /J "C:\Users\kysar\OneDrive\Desktop\web-utp-conecta\utp-conecta\static\fastapi-blogs" "C:\Users\kysar\OneDrive\Desktop\web-utp-conecta\utp-conecta-fastAPI\static\uploads\blogs"

@@ -13,7 +13,7 @@ def vista_editarBlog():
     if not user_data:
         return redirect(url_for('login'))
     
-    id_post = request.args.get('id')
+    id_post = request.args.get('id') or request.args.get('id_post')
     if not id_post:
         return "ID de blog no proporcionado", 400
     
@@ -134,3 +134,81 @@ def obtener_subcategorias(id_categoria):
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@bp.route('/actualizar-blog', methods=['POST'])
+def actualizar_blog():
+    try:
+        # Verificar autenticación y obtener datos de usuario
+        user_data = session.get('user_data')
+        token = session.get('token')
+        if not user_data or not token:
+            return jsonify({'error': 'No autenticado'}), 401
+        
+        # Obtener ID de usuario de la sesión
+        id_usuario = user_data.get('IdUsuario')
+        if not id_usuario:
+            return jsonify({'error': 'ID de usuario no encontrado en la sesión'}), 400
+
+        # Obtener datos del formulario
+        id_post = request.form.get('id_post')
+        if not id_post:
+            return jsonify({'error': 'ID de post no proporcionado'}), 400
+
+        # Preparar headers
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'accept': 'application/json'
+        }
+
+        # Preparar datos para la API
+        data = {
+            'titulo': request.form.get('titulo'),
+            'contenido': request.form.get('contenido'),
+            'id_usuario': id_usuario,  # Usamos el ID de la sesión
+            'id_categoria': request.form.get('id_categoria'),
+            'id_subcategoria': request.form.get('id_subcategoria'),
+            'estado': request.form.get('estado'),
+            'imagenes_eliminadas': request.form.get('imagenes_eliminadas', '[]')
+        }
+
+        # Validar datos requeridos (excepto id_usuario que ya lo tenemos)
+        required_fields = ['titulo', 'contenido', 'id_categoria', 'id_subcategoria', 'estado']
+        for field in required_fields:
+            if not data[field]:
+                return jsonify({'error': f'Falta el campo requerido: {field}'}), 400
+
+        # Preparar archivos para la API
+        files = []
+        if 'imagenes' in request.files:
+            for file in request.files.getlist('imagenes'):
+                if file.filename:  # Solo si el archivo tiene nombre (no está vacío)
+                    files.append(('imagenes', (file.filename, file.stream, file.mimetype)))
+
+        # Hacer la petición a la API
+        api_url = f'{API_BASE_URL}/actualizar-blog/{id_post}'
+        
+        response = requests.put(
+            api_url,
+            headers=headers,
+            data=data,
+            files=files if files else None
+        )
+
+        # Manejar respuesta
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            error_detail = response.json().get('detail', 'Error desconocido') if response.content else 'Error sin respuesta'
+            return jsonify({
+                'error': 'Error al actualizar el blog',
+                'api_error': error_detail,
+                'status_code': response.status_code
+            }), response.status_code
+            
+    except json.JSONDecodeError as e:
+        return jsonify({'error': f'Error decodificando JSON: {str(e)}'}), 500
+    except requests.exceptions.RequestException as e:
+        return jsonify({'error': f'Error de conexión con la API: {str(e)}'}), 500
+    except Exception as e:
+        return jsonify({'error': f'Error inesperado: {str(e)}'}), 500

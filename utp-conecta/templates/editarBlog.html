@@ -73,12 +73,12 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <form id="form-editar-blog" enctype="multipart/form-data">
-                                    <input type="hidden" id="id_post" value="{{ blog.id_post }}">
+                                    <input type="hidden" name="id_post" value="{{ blog.id_post }}">
                                     <input type="hidden" id="id_usuario" value="{{ user_data.IdUsuario }}">
                                     
                                     <div class="form-group">
                                         <label>Título del blog</label>
-                                        <input type="text" class="form-control" id="titulo" 
+                                        <input type="text" class="form-control" name="titulo" 
                                                value="{{ blog.titulo }}" required>
                                     </div>
                                     
@@ -116,7 +116,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Categoría</label>
-                                                <select class="form-control select" id="categoria" required>
+                                                <select class="form-control select" name="id_categoria" required>
                                                     <option value="">Seleccionar categoría</option>
                                                     {% for cat in categorias %}
                                                     <option value="{{ cat.id }}" 
@@ -130,7 +130,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Subcategoría</label>
-                                                <select class="form-control select" id="subcategoria" required>
+                                                <select class="form-control select" name="id_subcategoria" required>
                                                     <option value="">Seleccionar subcategoría</option>
                                                     {% for sub in subcategorias %}
                                                     <option value="{{ sub.id }}" 
@@ -146,7 +146,7 @@
                                     
                                     <div class="form-group">
                                         <label>Contenido del blog</label>
-                                        <textarea class="form-control" id="contenido" rows="10" required>{{ blog.contenido }}</textarea>
+                                        <textarea class="form-control" name="contenido" rows="10" required>{{ blog.contenido }}</textarea>
                                     </div>
                                     
                                     <div class="row">
@@ -196,9 +196,9 @@
             $('.select').select2();
             
             // Manejar cambio de categoría
-            $('#categoria').change(function() {
+            $('select[name="id_categoria"]').change(function() {
                 const catId = $(this).val();
-                const $subcategoria = $('#subcategoria');
+                const $subcategoria = $('select[name="id_subcategoria"]');
                 
                 // Ocultar todas las opciones primero
                 $subcategoria.find('option').each(function() {
@@ -220,77 +220,61 @@
             });
             
             // Inicializar subcategorías según la categoría seleccionada
-            if ($('#categoria').val()) {
-                $('#categoria').trigger('change');
+            if ($('select[name="id_categoria"]').val()) {
+                $('select[name="id_categoria"]').trigger('change');
                 
                 // Asegurar que la subcategoría actual se muestre seleccionada
                 const subcatActual = "{{ subcategoria_actual }}";
                 if (subcatActual) {
-                    $('#subcategoria').val(subcatActual).trigger('change');
+                    $('select[name="id_subcategoria"]').val(subcatActual).trigger('change');
                 }
             }
             
             // Manejar envío del formulario
-            $('#form-editar-blog').submit(function(e) {
-                e.preventDefault();
-                
-                const formData = new FormData();
-                formData.append('titulo', $('#titulo').val());
-                formData.append('contenido', $('#contenido').val());
-                formData.append('id_usuario', $('#id_usuario').val());
-                formData.append('id_categoria', $('#categoria').val());
-                formData.append('id_subcategoria', $('#subcategoria').val());
-                formData.append('estado', $('input[name="estado"]:checked').val());
-                formData.append('imagenes_eliminadas', JSON.stringify(imagenesEliminadas));
-                
-                // Agregar imágenes nuevas
-                const files = $('#imagenes')[0].files;
-                for (let i = 0; i < files.length; i++) {
-                    formData.append('imagenes', files[i]);
+$('#form-editar-blog').submit(function(e) {
+    e.preventDefault();
+    
+    // Crear FormData con los datos del formulario
+    const formData = new FormData(this);
+    formData.append('imagenes_eliminadas', JSON.stringify(imagenesEliminadas));
+    
+    // Mostrar indicador de carga
+    const submitBtn = $(this).find('button[type="submit"]');
+    const originalText = submitBtn.html();
+    submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+    
+    // Enviar datos al endpoint de Flask
+    $.ajax({
+        url: '/actualizar-blog',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response.message) {
+                alert(response.message);
+                window.location.href = "/blogs";
+            } else {
+                alert('Error: ' + (response.error || 'Error desconocido'));
+            }
+        },
+        error: function(xhr) {
+            let errorMsg = 'Error al actualizar el blog';
+            if (xhr.responseJSON) {
+                errorMsg += ': ' + (xhr.responseJSON.error || JSON.stringify(xhr.responseJSON));
+                if (xhr.responseJSON.api_error) {
+                    errorMsg += '\nDetalle: ' + JSON.stringify(xhr.responseJSON.api_error);
                 }
-                
-                // Mostrar indicador de carga
-                const submitBtn = $(this).find('button[type="submit"]');
-                const originalText = submitBtn.html();
-                submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
-                
-                // Enviar datos a la API
-                $.ajax({
-                    url: 'http://127.0.0.1:8002/api/blog/actualizar-blog/' + $('#id_post').val(),
-                    type: 'PUT',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    beforeSend: function(xhr) {
-                        // Agregar token de autenticación si existe
-                        const token = "{{ session.get('token', '') }}";
-                        if (token) {
-                            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-                        }
-                    },
-                    success: function(response) {
-                        alert('Blog actualizado correctamente');
-                        window.location.reload();
-                    },
-                    error: function(xhr) {
-                        let errorMsg = 'Error al actualizar el blog';
-                        try {
-                            if (xhr.responseJSON && xhr.responseJSON.detail) {
-                                errorMsg += ': ' + xhr.responseJSON.detail;
-                            } else if (xhr.responseText) {
-                                const response = JSON.parse(xhr.responseText);
-                                errorMsg += ': ' + response.detail;
-                            }
-                        } catch (e) {
-                            errorMsg += ': ' + xhr.statusText;
-                        }
-                        alert(errorMsg);
-                    },
-                    complete: function() {
-                        submitBtn.prop('disabled', false).html(originalText);
-                    }
-                });
-            });
+            } else {
+                errorMsg += ': ' + xhr.statusText;
+            }
+            alert(errorMsg);
+        },
+        complete: function() {
+            submitBtn.prop('disabled', false).html(originalText);
+        }
+    });
+});
         });
         
         // Función para eliminar imágenes

@@ -487,3 +487,232 @@ async def actualizar_blog(
         )
     finally:
         cursor.close()
+
+
+# @router.get("/blogs-publicos", response_model=List[dict])
+# async def obtener_blogs_publicos(
+#     limite: int = 10,
+#     conn = Depends(get_db_connection)
+# ):
+#     cursor = conn.cursor()
+#     try:
+#         # Consulta para obtener los posts públicos más recientes
+#         cursor.execute("""
+#             SELECT 
+#                 bp.IdPost, bp.Titulo, bp.Contenido, 
+#                 bp.FechaPublicacion, bp.FechaActualizacion,
+#                 bp.Estado, bp.Visitas,
+#                 u.IdUsuario, u.Nombres, u.ApellidoPaterno, u.ApellidoMaterno,
+#                 u.FotoPerfil, u.TipoUsuario
+#             FROM BlogPosts bp
+#             JOIN Usuarios u ON bp.IdUsuario = u.IdUsuario
+#             WHERE bp.Estado = 'Activo'
+#             ORDER BY bp.FechaPublicacion DESC
+#             OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY
+#         """, (limite,))
+        
+#         posts = cursor.fetchall()
+        
+#         if not posts:
+#             return []
+        
+#         # Estructura para almacenar los resultados
+#         resultados = []
+        
+#         for post in posts:
+#             # Obtener categorías y subcategorías para cada post
+#             cursor.execute("""
+#                 SELECT 
+#                     c.IdCategoria, c.Nombre AS Categoria, c.Icono,
+#                     sc.IdSubcategoria, sc.Nombre AS Subcategoria
+#                 FROM PostCategorias pc
+#                 JOIN Subcategorias sc ON pc.IdSubcategoria = sc.IdSubcategoria
+#                 JOIN Categorias c ON sc.IdCategoria = c.IdCategoria
+#                 WHERE pc.IdPost = ?
+#             """, (post.IdPost,))
+            
+#             categorias = []
+#             for cat in cursor.fetchall():
+#                 categorias.append({
+#                     "id_categoria": cat.IdCategoria,
+#                     "categoria": cat.Categoria,
+#                     "icono": cat.Icono,
+#                     "id_subcategoria": cat.IdSubcategoria,
+#                     "subcategoria": cat.Subcategoria
+#                 })
+            
+#             # Obtener multimedia para cada post
+#             cursor.execute("""
+#                 SELECT 
+#                     IdMultimedia, Tipo, RutaArchivo, 
+#                     NombreOriginal, Tamano, FechaSubida, Orden
+#                 FROM Multimedia
+#                 WHERE IdPost = ?
+#                 ORDER BY Orden
+#             """, (post.IdPost,))
+            
+#             multimedia = []
+#             for media in cursor.fetchall():
+#                 multimedia.append({
+#                     "id": media.IdMultimedia,
+#                     "tipo": media.Tipo,
+#                     "ruta": media.RutaArchivo,
+#                     "nombre_original": media.NombreOriginal,
+#                     "tamano": media.Tamano,
+#                     "fecha_subida": media.FechaSubida,
+#                     "orden": media.Orden
+#                 })
+            
+#             # Obtener conteo de likes y comentarios
+#             cursor.execute("""
+#                 SELECT COUNT(*) FROM Likes WHERE IdPost = ?
+#             """, (post.IdPost,))
+#             likes = cursor.fetchone()[0]
+            
+#             cursor.execute("""
+#                 SELECT COUNT(*) FROM Comentarios WHERE IdPost = ?
+#             """, (post.IdPost,))
+#             comentarios = cursor.fetchone()[0]
+            
+#             # Construir el objeto del post
+#             post_data = {
+#                 "id_post": post.IdPost,
+#                 "titulo": post.Titulo,
+#                 "contenido": post.Contenido,
+#                 "fecha_publicacion": post.FechaPublicacion.isoformat(),
+#                 "fecha_actualizacion": post.FechaActualizacion.isoformat() if post.FechaActualizacion else None,
+#                 "estado": post.Estado,
+#                 "visitas": post.Visitas,
+#                 "likes": likes,
+#                 "comentarios": comentarios,
+#                 "usuario": {
+#                     "id": post.IdUsuario,
+#                     "nombres": post.Nombres,
+#                     "apellido_paterno": post.ApellidoPaterno,
+#                     "apellido_materno": post.ApellidoMaterno,
+#                     "foto_perfil": post.FotoPerfil,
+#                     "tipo_usuario": post.TipoUsuario
+#                 },
+#                 "categorias": categorias,
+#                 "multimedia": multimedia
+#             }
+            
+#             resultados.append(post_data)
+        
+#         return resultados
+    
+#     except pyodbc.Error as e:
+#         raise HTTPException(
+#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+#             detail=f"Error en la base de datos: {str(e)}"
+#         )
+#     finally:
+#         cursor.close()
+
+
+@router.get("/blogs-publicos", response_model=List[dict])
+async def obtener_blogs_publicos(
+    limite: int = 10,
+    conn = Depends(get_db_connection)
+):
+    cursor = conn.cursor()
+    try:
+        # Consulta para obtener los posts públicos más recientes
+        cursor.execute("""
+            SELECT 
+                bp.IdPost, bp.Titulo, bp.Contenido, 
+                bp.FechaPublicacion, bp.FechaActualizacion,
+                bp.Estado, bp.Visitas,
+                u.IdUsuario, u.Nombres, u.ApellidoPaterno, u.ApellidoMaterno,
+                u.FotoPerfil, u.TipoUsuario
+            FROM BlogPosts bp
+            JOIN Usuarios u ON bp.IdUsuario = u.IdUsuario
+            WHERE bp.Estado = 'Activo'
+            ORDER BY bp.FechaPublicacion DESC
+            OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY
+        """, (limite,))
+        
+        posts = cursor.fetchall()
+        
+        if not posts:
+            return []
+        
+        # Estructura para almacenar los resultados
+        resultados = []
+        
+        for post in posts:
+            # Obtener categorías y subcategorías para cada post
+            cursor.execute("""
+                SELECT 
+                    c.IdCategoria, c.Nombre AS Categoria, c.Icono,
+                    sc.IdSubcategoria, sc.Nombre AS Subcategoria
+                FROM PostCategorias pc
+                JOIN Subcategorias sc ON pc.IdSubcategoria = sc.IdSubcategoria
+                JOIN Categorias c ON sc.IdCategoria = c.IdCategoria
+                WHERE pc.IdPost = ?
+            """, (post.IdPost,))
+            
+            categorias = []
+            for cat in cursor.fetchall():
+                categorias.append({
+                    "id_categoria": cat.IdCategoria,
+                    "categoria": cat.Categoria,
+                    "icono": cat.Icono,
+                    "id_subcategoria": cat.IdSubcategoria,
+                    "subcategoria": cat.Subcategoria
+                })
+            
+            # Obtener multimedia para cada post
+            cursor.execute("""
+                SELECT 
+                    IdMultimedia, Tipo, RutaArchivo, 
+                    NombreOriginal, Tamano, FechaSubida, Orden
+                FROM Multimedia
+                WHERE IdPost = ?
+                ORDER BY Orden
+            """, (post.IdPost,))
+            
+            multimedia = []
+            for media in cursor.fetchall():
+                multimedia.append({
+                    "id": media.IdMultimedia,
+                    "tipo": media.Tipo,
+                    "ruta": media.RutaArchivo,
+                    "nombre_original": media.NombreOriginal,
+                    "tamano": media.Tamano,
+                    "fecha_subida": media.FechaSubida,
+                    "orden": media.Orden
+                })
+            
+            # Construir el objeto del post (sin likes y comentarios)
+            post_data = {
+                "id_post": post.IdPost,
+                "titulo": post.Titulo,
+                "contenido": post.Contenido,
+                "fecha_publicacion": post.FechaPublicacion.isoformat(),
+                "fecha_actualizacion": post.FechaActualizacion.isoformat() if post.FechaActualizacion else None,
+                "estado": post.Estado,
+                "visitas": post.Visitas,
+                "usuario": {
+                    "id": post.IdUsuario,
+                    "nombres": post.Nombres,
+                    "apellido_paterno": post.ApellidoPaterno,
+                    "apellido_materno": post.ApellidoMaterno,
+                    "foto_perfil": post.FotoPerfil,
+                    "tipo_usuario": post.TipoUsuario
+                },
+                "categorias": categorias,
+                "multimedia": multimedia
+            }
+            
+            resultados.append(post_data)
+        
+        return resultados
+    
+    except pyodbc.Error as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error en la base de datos: {str(e)}"
+        )
+    finally:
+        cursor.close()
